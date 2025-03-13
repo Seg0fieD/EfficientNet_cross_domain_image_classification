@@ -17,8 +17,14 @@ def train_model(source_domains, target_domain):
         target_domain (str): Domain to use for testing (e.g., "sketch").
     """
     # Set device
-    device = "mps" if torch.backends.mps.is_available() else "cpu"
-    print(f"Using device: {device}\n")
+     # Set device
+    if torch.cuda.is_available():
+        device = "cuda"
+    elif torch.backends.mps.is_available():
+        device = "mps"
+    else:
+        device = "cpu"
+    print(f"Using device: {device}")
 
     # Initialize logger
     logger = Logger()

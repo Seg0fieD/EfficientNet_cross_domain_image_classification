@@ -9,16 +9,20 @@ import torch
 import os
 
 if __name__ == "__main__":
-    # Train on multiple domains and test on a separate domain
-    source_domains = ["art_painting", "cartoon", "photo"]  # Train on these domains
-    target_domain = "sketch"  # Evaluate on this domain
+    source_domains = ["art_painting", "cartoon", "photo"]  # Train 
+    target_domain = "sketch"  # Evaluate 
 
-    # Train the model
+    # Model Training
     train_model(source_domains, target_domain)
 
     # Evaluate the model
     # Set device
-    device = "mps" if torch.backends.mps.is_available() else "cpu"
+    if torch.cuda.is_available():
+        device = "cuda"
+    elif torch.backends.mps.is_available():
+        device = "mps"
+    else:
+        device = "cpu"
     print(f"Using device: {device}")
 
     # Load the trained model
@@ -26,7 +30,7 @@ if __name__ == "__main__":
     model.load_state_dict(torch.load(os.path.join(Config.SAVE_DIR, Config.MODEL_NAME)))
 
     # Load the test dataloader for the target domain
-    _, test_loader = get_dataloaders([], target_domain)  # Pass an empty list for source_domains
+    _, test_loader = get_dataloaders([], target_domain) 
 
     # Evaluate the model
     evaluate_model(model, test_loader, device, target_domain)

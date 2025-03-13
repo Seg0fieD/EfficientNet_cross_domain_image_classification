@@ -209,8 +209,14 @@ class EfficientNet(nn.Module):
 
 # # Test model-architecture
 # def test():
-#     device = "mps" if torch.backends.mps.is_available() else "cpu"
-#     print(device)
+#      # Set device
+#     if torch.cuda.is_available():
+#         device = "cuda"
+#     elif torch.backends.mps.is_available():
+#         device = "mps"
+#     else:
+#         device = "cpu"
+#     print(f"Using device: {device}")
 #     version = "b2"
 #     phi, res, drop_rate = compoundScaling_params[version]
 #     num_examples, num_classes = 4, 10

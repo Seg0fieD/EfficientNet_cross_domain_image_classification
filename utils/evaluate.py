@@ -14,6 +14,16 @@ def evaluate_model(model, test_loader, device, target_domain):
     model.eval()
     correct = 0
     total = 0
+
+     # Set device
+    if torch.cuda.is_available():
+        device = "cuda"
+    elif torch.backends.mps.is_available():
+        device = "mps"
+    else:
+        device = "cpu"
+    print(f"Using device: {device}")
+    
     with torch.no_grad():
         for images, labels in tqdm(test_loader, desc="Evaluating"):
             images, labels = images.to(device), labels.to(device)
